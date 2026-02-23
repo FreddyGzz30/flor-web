@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>Flor 05 Web</title>
 </head>
+
 <body style="margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh;">
+
   <canvas id="canvas" width="600" height="600"></canvas>
 
   <script>
@@ -18,15 +20,25 @@
       });
 
     function draw(shapes) {
+
+      ctx.save();
+
+      // Centramos el dibujo
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+
+      // Escala (ajusta este valor si la quieres más grande o pequeña)
+      ctx.scale(1.4, 1.4);
+
+      // Ajuste para mover el origen al centro real del JSON
+      ctx.translate(-300, -300);
+
       shapes.forEach(shape => {
 
-        const r = Math.round(shape.color[0]);
-        const g = Math.round(shape.color[1]);
-        const b = Math.round(shape.color[2]);
+        const r = Math.min(255, Math.max(0, Math.round(shape.color[0])));
+        const g = Math.min(255, Math.max(0, Math.round(shape.color[1])));
+        const b = Math.min(255, Math.max(0, Math.round(shape.color[2])));
 
-ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-
-ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
         ctx.beginPath();
 
@@ -44,7 +56,10 @@ ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
         ctx.closePath();
         ctx.fill();
       });
+
+      ctx.restore();
     }
   </script>
+
 </body>
 </html>
