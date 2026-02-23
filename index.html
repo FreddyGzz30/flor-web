@@ -51,7 +51,7 @@
         regions.forEach(region => {
 
           const [r, g, b] = region.color;
-          ctx.fillStyle = `rgb(${r},${g},${b})`;
+          ctx.fillStyle = `rgb(${r*255}, ${g*255}, ${b*255})`;
 
           ctx.beginPath();
 
