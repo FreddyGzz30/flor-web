@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sunflower 🌻</title>
+  <title>Test Canvas</title>
   <style>
     body {
       margin: 0;
@@ -11,63 +11,26 @@
       align-items: center;
       height: 100vh;
     }
-    canvas {
-      background: black;
-    }
   </style>
 </head>
 <body>
+
   <canvas id="canvas" width="800" height="800"></canvas>
 
   <script>
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-  fetch("sunflowers.json")
-    .then(response => response.json())
-    .then(regions => {
+    // Fondo rojo grande
+    ctx.fillStyle = "red";
+    ctx.fillRect(0, 0, 800, 800);
 
-      const allPoints = regions.flatMap(r => r.contour);
-  
-      const xs = allPoints.map(p => p[0]);
-      const ys = allPoints.map(p => p[1]);
-  
-      const minX = Math.min(...xs);
-      const maxX = Math.max(...xs);
-      const minY = Math.min(...ys);
-      const maxY = Math.max(...ys);
-  
-      const width = maxX - minX;
-      const height = maxY - minY;
-  
-      const scale = Math.min(700 / width, 700 / height);
-  
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-  
-      regions.forEach(region => {
+    // Cuadro amarillo
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(250, 250, 300, 300);
 
-      const [r, g, b] = region.color;
-      ctx.fillStyle = `rgb(${r*255}, ${g*255}, ${b*255})`;
+    console.log("Canvas funcionando 🚀");
+  </script>
 
-      ctx.beginPath();
-
-      region.contour.forEach((point, index) => {
-
-        const x = (point[0] - (minX + width/2)) * scale;
-        const y = (point[1] - (minY + height/2)) * scale;
-
-        if (index === 0) {
-          ctx.moveTo(x, -y);
-        } else {
-          ctx.lineTo(x, -y);
-        }
-      });
-
-      ctx.closePath();
-      ctx.fill();
-    });
-
-  });
-</script>
 </body>
 </html>
