@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sunflower 🌻</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      background: black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="800"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    fetch("sunflowers.json")
+      .then(response => response.json())
+      .then(regions => {
+
+        const allPoints = regions.flatMap(r => r.contour);
+
+        const xs = allPoints.map(p => p[0]);
+        const ys = allPoints.map(p => p[1]);
+
+        const minX = Math.min(...xs);
+        const maxX = Math.max(...xs);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+
+        const width = maxX - minX;
+        const height = maxY - minY;
+
+        const scale = Math.min(700 / width, 700 / height);
+
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+
+        ctx.translate(400, 400);
+        ctx.scale(1, -1);
+
+        regions.forEach(region => {
+
+          const [r, g, b] = region.color;
+          ctx.fillStyle = `rgb(${r},${g},${b})`;
+
+          ctx.beginPath();
+
+          region.contour.forEach((point, index) => {
+
+            const x = (point[0] - centerX) * scale;
+            const y = (point[1] - centerY) * scale;
+
+            if (index === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+          });
+
+          ctx.closePath();
+          ctx.fill();
+        });
+
+      });
+  </script>
+</body>
+</html>
