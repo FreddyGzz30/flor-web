@@ -2,37 +2,27 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Sunflower Web</title>
+  <title>Flor 05 Web</title>
 </head>
-
 <body style="margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh;">
-
   <canvas id="canvas" width="600" height="600"></canvas>
 
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    // Fondo negro real
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     fetch("sunflowers.json")
       .then(response => response.json())
       .then(data => {
         draw(data);
-      })
-      .catch(error => {
-        console.error("Error cargando JSON:", error);
       });
 
     function draw(shapes) {
       shapes.forEach(shape => {
 
-        // Ajuste seguro de color
-        const r = Math.min(255, Math.max(0, Math.round(shape.color[0])));
-        const g = Math.min(255, Math.max(0, Math.round(shape.color[1])));
-        const b = Math.min(255, Math.max(0, Math.round(shape.color[2])));
+        const r = Math.round(shape.color[0]);
+        const g = Math.round(shape.color[1]);
+        const b = Math.round(shape.color[2]);
 
         ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
@@ -54,6 +44,5 @@
       });
     }
   </script>
-
 </body>
 </html>
