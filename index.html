@@ -2,41 +2,44 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Flor</title>
-  <style>
-    body {
-      margin: 0;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    canvas {
-      border: 1px solid white;
-    }
-  </style>
+  <title>Flor 05 Web</title>
 </head>
-<body>
+<body style="margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh;">
+  <canvas id="canvas" width="600" height="600"></canvas>
 
-<canvas id="canvas" width="600" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-<script>
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
+    fetch("sunflowers.json")
+      .then(response => response.json())
+      .then(data => {
+        draw(data);
+      });
 
-  ctx.fillStyle = "yellow";
-  ctx.beginPath();
-  ctx.arc(300, 300, 80, 0, Math.PI * 2);
-  ctx.fill();
+    function draw(shapes) {
+      shapes.forEach(shape => {
 
-  ctx.fillStyle = "red";
-  for (let i = 0; i < 12; i++) {
-    ctx.beginPath();
-    ctx.ellipse(300, 300, 40, 100, i * 30 * Math.PI / 180, 0, Math.PI * 2);
-    ctx.fill();
-  }
-</script>
+        const color = shape.color.map(c => Math.floor(c * 255));
+        ctx.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 
+        ctx.beginPath();
+
+        shape.contour.forEach((point, index) => {
+          const x = point[0];
+          const y = point[1];
+
+          if (index === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+
+        ctx.closePath();
+        ctx.fill();
+      });
+    }
+  </script>
 </body>
 </html>
