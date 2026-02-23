@@ -20,9 +20,9 @@
     function draw(shapes) {
       shapes.forEach(shape => {
 
-        const r = Math.round(shape.color[0] * 255);
-        const g = Math.round(shape.color[1] * 255);
-        const b = Math.round(shape.color[2] * 255);
+        const r = Math.min(255, Math.round(shape.color[0] * 300));
+        const g = Math.min(255, Math.round(shape.color[1] * 300));
+        const b = Math.min(255, Math.round(shape.color[2] * 300));
 
 ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
