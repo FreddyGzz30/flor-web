@@ -7,7 +7,7 @@
 
 <body style="margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh;">
 
-  <canvas id="canvas" width="600" height="600"></canvas>
+  <canvas id="canvas" width="800" height="800"></canvas>
 
   <script>
     const canvas = document.getElementById("canvas");
@@ -21,16 +21,37 @@
 
     function draw(shapes) {
 
+      // --- CALCULAR BORDES REALES ---
+      let minX = Infinity, minY = Infinity;
+      let maxX = -Infinity, maxY = -Infinity;
+
+      shapes.forEach(shape => {
+        shape.contour.forEach(point => {
+          minX = Math.min(minX, point[0]);
+          minY = Math.min(minY, point[1]);
+          maxX = Math.max(maxX, point[0]);
+          maxY = Math.max(maxY, point[1]);
+        });
+      });
+
+      const drawingWidth = maxX - minX;
+      const drawingHeight = maxY - minY;
+
+      // Escala automática para que quepa en canvas
+      const scale = Math.min(
+        canvas.width / drawingWidth,
+        canvas.height / drawingHeight
+      ) * 0.9; // 0.9 para dejar margen
+
       ctx.save();
 
-      // Centramos el dibujo
+      // Centrar
       ctx.translate(canvas.width / 2, canvas.height / 2);
-
-      // Escala (ajusta este valor si la quieres más grande o pequeña)
-      ctx.scale(1.4, 1.4);
-
-      // Ajuste para mover el origen al centro real del JSON
-      ctx.translate(-300, -300);
+      ctx.scale(scale, scale);
+      ctx.translate(
+        -(minX + drawingWidth / 2),
+        -(minY + drawingHeight / 2)
+      );
 
       shapes.forEach(shape => {
 
@@ -43,13 +64,10 @@
         ctx.beginPath();
 
         shape.contour.forEach((point, index) => {
-          const x = point[0];
-          const y = point[1];
-
           if (index === 0) {
-            ctx.moveTo(x, y);
+            ctx.moveTo(point[0], point[1]);
           } else {
-            ctx.lineTo(x, y);
+            ctx.lineTo(point[0], point[1]);
           }
         });
 
